@@ -99,6 +99,11 @@ describe SolrQuery do
       @it.build(:id => ['User:1', 'User:2']) \
         .should == 'id:(User\:1 OR User\:2)'
     end
+
+    it 'should not escape values (Hash) whith :escape param' do
+      @it.build(:text => { :value => 'My*test', :escape => false }) \
+        .should == 'text:(My*test)'
+    end
     
     it "should avoid matching anything if given an empty array as a value" do
       @it.build(

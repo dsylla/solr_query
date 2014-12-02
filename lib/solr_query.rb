@@ -60,7 +60,12 @@ module SolrQuery
           downcase = false # don't downcase the ORs
         end
       elsif object.is_a?(Hash) || object.is_a?(Range)
-        return solr_range(object) # avoid escaping the *
+        if object.is_a?(Hash) && object.has_key?(:escape)
+          dont_escape = true
+          string = object[:value]
+        else
+          return solr_range(object) # avoid escaping the *
+        end
       elsif defined?(ActiveRecord) && object.is_a?(ActiveRecord::Base)
         string = object.id.to_s
       elsif object.is_a?(String)
